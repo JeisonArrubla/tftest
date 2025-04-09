@@ -3,12 +3,12 @@ variable "ohio_cidr" {
   type        = string
 }
 
-variable "public_subnet" {
-  description = "CIDR public subnet"
-  type        = string
+variable "subnets_cidr" {
+  description = "Mapa de nombres de subnets a sus respectivos bloques CIDR."
+  type        = map(string)
 }
 
-variable "private_subnet" {
-  description = "CIDR private subnet"
-  type        = string
+variable "tags" {
+  description = "Tags del proyecto"
+  type        = map(string)
 }
