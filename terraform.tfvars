@@ -12,3 +12,10 @@ tags = {
   "IAC"         = "Terraform"
   "IAC_version" = "1.11.3"
 }
+
+ingress_cidr_sg = "0.0.0.0/0"
+
+ec2_specs = {
+  "ami"           = "ami-0100e595e1cc1ff7f"
+  "instance_type" = "t2.micro"
+}

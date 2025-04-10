@@ -12,3 +12,13 @@ variable "tags" {
   description = "Tags del proyecto"
   type        = map(string)
 }
+
+variable "ingress_cidr_sg" {
+  description = "CIDR para el tráfico de entrada"
+  type        = string
+}
+
+variable "ec2_specs" {
+  description = "Parametros de la instancia"
+  type        = map(string)
+}
