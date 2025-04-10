@@ -14,4 +14,8 @@ resource "aws_instance" "public_instance" {
     when    = destroy
     command = "echo Instancia ${self.public_ip} destruida"
   }
+
+  tags = {
+    Name = "public-instance"
+  }
 }
