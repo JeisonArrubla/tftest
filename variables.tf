@@ -22,3 +22,8 @@ variable "ec2_specs" {
   description = "Parametros de la instancia"
   type        = map(string)
 }
+
+variable "ingress_ports_list" {
+  description = "Lista de puertos de ingress"
+  type        = list(number)
+}

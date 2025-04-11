@@ -4,6 +4,7 @@ resource "aws_instance" "public_instance" {
   subnet_id              = aws_subnet.public_subnet.id
   key_name               = data.aws_key_pair.key.key_name
   vpc_security_group_ids = [aws_security_group.public_instance_sg.id]
+  user_data              = file("scripts/userdata.sh")
 
   provisioner "local-exec" {
     when    = create
@@ -16,6 +17,6 @@ resource "aws_instance" "public_instance" {
   }
 
   tags = {
-    Name = "public-instance"
+    Name = "public-instance-${local.sufix}"
   }
 }

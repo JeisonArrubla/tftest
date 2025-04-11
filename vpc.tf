@@ -1,7 +1,7 @@
 resource "aws_vpc" "ohio_vpc" {
   cidr_block = var.ohio_cidr
   tags = {
-    Name = "vpc-ohio"
+    Name = "vpc-ohio-${local.sufix}"
   }
 }
 
@@ -11,7 +11,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true # Hacer que a las instancias lanzadas en la subred se les asigne una dirección IP pública
 
   tags = {
-    Name = "public-subnet"
+    Name = "public-subnet-${local.sufix}"
   }
 }
 
@@ -20,7 +20,7 @@ resource "aws_subnet" "private_subnet" {
   cidr_block = var.subnets_cidr["private_subnet"]
 
   tags = {
-    Name = "private-subnet"
+    Name = "private-subnet-${local.sufix}"
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.ohio_vpc.id
 
   tags = {
-    Name = "ohio-vpc-igw"
+    Name = "ohio-vpc-igw-${local.sufix}"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_route_table" "public_crt" {
   }
 
   tags = {
-    Name = "public-custom-route-table"
+    Name = "public-custom-route-table-${local.sufix}"
   }
 }
 
@@ -50,15 +50,17 @@ resource "aws_route_table_association" "crta_public_subnet" {
 }
 
 resource "aws_security_group" "public_instance_sg" {
-  description = "Permitir el trafico entrante SSH y TODO el trafico de salida"
+  description = "Permitir el trafico entrante (SSH, HTTP y HTTPS) y TODO el trafico de salida"
   vpc_id      = aws_vpc.ohio_vpc.id
 
-  ingress {
-    description = "SSH a traves de Internet"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.ingress_cidr_sg]
+  dynamic "ingress" {
+    for_each = var.ingress_ports_list
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = [var.ingress_cidr_sg]
+    }
   }
 
   egress {
@@ -70,6 +72,6 @@ resource "aws_security_group" "public_instance_sg" {
   }
 
   tags = {
-    Name = "public-instance-sg"
+    Name = "public-instance-sg-${local.sufix}"
   }
 }
